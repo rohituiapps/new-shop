@@ -1,0 +1,27 @@
+public class ClientPortalExceptionHandlerAttribute: ActionFilterAttribute, IExceptionFilter
+    {
+        public void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.ExceptionHandled || filterContext.HttpContext.IsCustomErrorEnabled)
+            {
+                return;
+            }
+
+            Exception exception = filterContext.Exception;            
+            if (!string.IsNullOrEmpty(CryptographyHelper.GetSessionVariable(SessionInformation.UserInfo.UserId)))
+            {
+                int userId = int.Parse(CryptographyHelper.GetSessionVariable(SessionInformation.UserInfo.UserId));
+                LogProvider.LogInformation($"An error occured for userId: {userId}");
+            }
+
+            LogProvider.LogException(exception);
+            filterContext.ExceptionHandled = true;
+            filterContext.Controller.TempData["ErrorCode"] = Constants.UserInterfaceError;
+            filterContext.Controller.TempData["ErrorId"] = Convert.ToString(exception.Data["ErrorId"]);
+            filterContext.Result = new ViewResult()
+            {
+                ViewName = "Error",
+                TempData = filterContext.Controller.TempData
+            };
+        }
+    }

@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms'
 
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
@@ -22,6 +23,7 @@ import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
 import { LoginComponent } from './login/login.component';
 import { ItemFormComponent } from './admin/item-form/item-form.component';
+import { ProductService } from './product.service';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { ItemFormComponent } from './admin/item-form/item-form.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
@@ -53,6 +56,7 @@ import { ItemFormComponent } from './admin/item-form/item-form.component';
         { path: 'order-success', component: OrderSuccessComponent },
         { path: 'login', component: LoginComponent },
         { path: 'admin/items/new', component: ItemFormComponent },
+        { path: 'admin/items/:id', component: ItemFormComponent },
         { path: 'admin/admin-items', component: AdminItemsComponent },
         { path: 'admin/admin-orders', component: AdminOrdersComponent }
       ]
@@ -61,7 +65,8 @@ import { ItemFormComponent } from './admin/item-form/item-form.component';
   providers: [
     AuthService,
     AuthGuard,
-    CategoryService
+    CategoryService,
+    ProductService
   ],
   bootstrap: [AppComponent]
 })
